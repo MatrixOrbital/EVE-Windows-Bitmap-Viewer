@@ -7,7 +7,7 @@ EVE2, EVE3 or EVE4 Series Display](https://www.matrixorbital.com/ftdi-eve)
 
 To use this application you will require 
 
-[USB2SPI](https://www.matrixorbital.com/eve2-usb2spi-kit-a) module or
+[USB 2 SPI](https://www.matrixorbital.com/eve2-usb2spi-kit-a) module or
 [EVE3x USB version](https://www.matrixorbital.com/index.php?route=product/search&search=eve3x) TFT Display
 
 ## Usage
