@@ -1,7 +1,9 @@
 # Windows to EVE Bitmap viewer 
 
+![alt text](https://www.matrixorbital.com/image/cache/catalog/products/EVE/EVE3-43G-300x300.jpg)
+
 This is a sample application for Windows that will allow bitmaps to be displayed directly onto a [Matrix Orbital 
-EVE series Display](https://www.matrixorbital.com/ftdi-eve) 
+EVE2, EVE3 or EVE4 Series Display](https://www.matrixorbital.com/ftdi-eve) 
 
 To use this application you will require 
 
@@ -10,7 +12,7 @@ To use this application you will require
 
 ## Usage
 
-- Plugin the USB2SPI or USB EVE3x display and [install drivers](https://www.matrixorbital.com/index.php?route=download/download_category&dpath=6)
+- Plugin the USB2SPI or USB EVE3x display and [install the drivers](https://www.matrixorbital.com/index.php?route=download/download_category&dpath=6)
 - Start the application
 - Select the display size of your module  
 ![](display_size.png)
