@@ -24,7 +24,7 @@ If the display is detected properly you should now see the Matrix Orbital screen
 
 Now you can drag any image file on to the application and it will appear on your display.
 
-##Support Forums
+## Support Forums
 
 http://www.lcdforums.com/forums/viewforum.php?f=45
 
