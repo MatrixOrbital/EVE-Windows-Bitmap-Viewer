@@ -14,7 +14,7 @@ To use this application you will require
 
 - Plugin the USB2SPI or USB EVE3x display and [install the drivers](https://www.matrixorbital.com/index.php?route=download/download_category&dpath=6)
 - Download the source or compiled version here
-![](Downloadlink.png)
+![](Downloadlink1.png)
 - Start the application
 - Select the display size of your module  
 ![](display_size.png)
