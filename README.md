@@ -34,7 +34,7 @@ Now you can drag any image file on to the application and it will appear on your
 
 ## [Watch the video here](https://www.youtube.com/watch?v=zGJ_HENTz3Y)
 
-![](ScreenGrab1.png)
+![](ScreenGrab.png)
 
 ## Support Forums
 
