@@ -24,6 +24,10 @@ If the display is detected properly you should now see the Matrix Orbital screen
 
 Now you can drag any image file on to the application and it will appear on your display.
 
+##Support Forums
+
+http://www.lcdforums.com/forums/viewforum.php?f=45
+
 ## Code
 
 The sample application is written in C# with a DLL version of the [Matrix Orbital Eve Library](https://github.com/MatrixOrbital/EVE2-Library) to handle the communication with the module.
