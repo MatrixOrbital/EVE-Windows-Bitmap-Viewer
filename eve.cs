@@ -219,6 +219,13 @@ namespace EVEBitmapViewer
             return (UInt32)((7 << 24) | (((format) & 31) << 19) | (((linestride) & 1023) << 9) | (((height) & 511) << 0));
         }
         
+        public static UInt32 BITMAP_LAYOUTH(int linestride, int height)
+        {
+            int stride = (linestride >> 10) & 3;
+            height = (height >> 10) & 3;
+            return (UInt32)((0x28 << 24) | (stride << 2)  | height);
+        }
+        
         const string EveDLL = @"eve.dll";
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]

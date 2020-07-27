@@ -112,6 +112,7 @@ namespace EVEBitmapViewer
 
             EVE.Send_CMD(EVE.BITMAP_SOURCE(0));
             EVE.Send_CMD(EVE.BITMAP_LAYOUT(EVE.RGB565, EVE.Display_Width() * 2, EVE.Display_Height()));
+            EVE.Send_CMD(EVE.BITMAP_LAYOUTH(EVE.Display_Width() * 2, EVE.Display_Height()));
 
             EVE.Send_CMD(EVE.BEGIN(EVE.BITMAPS));                                  // Begin bitmap placement
             EVE.Send_CMD(EVE.VERTEX2II(0, 0, 0, 0));              // Define the placement position of the previously defined holding area.
@@ -159,7 +160,6 @@ namespace EVEBitmapViewer
 
         }
         bool CurrentState = false;
-        bool EveInit = false;
         bool ConnectEnable = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
