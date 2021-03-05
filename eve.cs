@@ -85,9 +85,12 @@ namespace EVEBitmapViewer
         public const int DISPLAY_38 = 5;
         public const int DISPLAY_35 = 6;
         public const int DISPLAY_29 = 7;
+        public const int DISPLAY_40 = 8;
+        public const int DISPLAY_101 = 9;
 
         public const int BOARD_EVE2 = 1;
         public const int BOARD_EVE3 = 2;
+        public const int BOARD_EVE4 = 3;
 
         public const int TOUCH_TPN = 0;
         public const int TOUCH_TPR = 1;
@@ -205,6 +208,16 @@ namespace EVEBitmapViewer
             return (uint)((2 << 30) | (((x) & 511) << 21) | (((y) & 511) << 12) | (((handle) & 31) << 7) | (((cell) & 127) << 0));
         }
 
+        public static UInt32 VERTEX2F(int x, int y)
+        {
+            return (uint)((1 << 30) | ((x& 32767) << 15) | (y & 32767) );
+        }
+
+        public static UInt32 VERTEXFORMAT(int frac)
+        {
+            return (uint)((39 << 24) | frac);
+        }
+
         public static UInt32 BITMAP_HANDLE(int handle) {
             return (uint)((5 << 24) | (((handle) & 31) << 0));
         }
@@ -264,7 +277,7 @@ namespace EVEBitmapViewer
         public static extern void Wait4CoProFIFOEmpty();
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
-        public static extern void HAL_SPI_Disable();
+        public static extern void EVE_SPI_Disable();
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
         public static extern void StartCoProTransfer(UInt32 address, byte reading);
@@ -273,7 +286,7 @@ namespace EVEBitmapViewer
         public static extern void CoProWrCmdBuf(IntPtr buffer, UInt32 count);
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
-        public static extern void HAL_SPI_WriteBuffer(IntPtr buffer, UInt32 count);
+        public static extern void EVE_SPI_WriteBuffer(IntPtr buffer, UInt32 count);
 
 
 

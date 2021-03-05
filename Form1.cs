@@ -18,13 +18,14 @@ namespace EVEBitmapViewer
         void MakeScreen_MatrixOrbital(int DotSize)
         {
             EVE.Send_CMD(EVE.CMD_DLSTART);                //Start a new display list
+            EVE.Send_CMD(EVE.VERTEXFORMAT(0));            //setup VERTEX2F to take pixel coordinates
             EVE.Send_CMD(EVE.CLEAR_COLOR_RGB(0, 0, 0));   //Determine the clear screen color
             EVE.Send_CMD(EVE.CLEAR(1, 1, 1));             //Clear the screen and the curren display list
             EVE.Send_CMD(EVE.COLOR_RGB(26, 26, 192));     // change colour to blue
             EVE.Send_CMD(EVE.POINT_SIZE(DotSize * 16));   // set point size to DotSize pixels. Points = (pixels x 16)
             EVE.Send_CMD(EVE.BEGIN(EVE.POINTS));          // start drawing point
             EVE.Send_CMD(EVE.TAG(1));                     // Tag the blue dot with a touch ID
-            EVE.Send_CMD(EVE.VERTEX2II(EVE.Display_Width()/2, EVE.Display_Height()/2, 0, 0));  // place blue point
+            EVE.Send_CMD(EVE.VERTEX2F(EVE.Display_Width()/2, EVE.Display_Height()/2));  // place blue point
             EVE.Send_CMD(EVE.END());                      // end drawing point
             EVE.Send_CMD(EVE.COLOR_RGB(255, 255, 255));   //Change color to white for text
 
@@ -40,12 +41,12 @@ namespace EVEBitmapViewer
             GCHandle pinnedArray = GCHandle.Alloc(data, GCHandleType.Pinned);
             IntPtr pointer = pinnedArray.AddrOfPinnedObject();
             int size = data.Length;
-            int blockSize = Math.Min(1024 * 64, data.Length);
+            int blockSize = Math.Min(1024 * 16, data.Length);
             while (blockSize > 0)
             {
                 EVE.StartCoProTransfer(address, 0);
-                EVE.HAL_SPI_WriteBuffer(pointer, (uint)blockSize);
-                EVE.HAL_SPI_Disable();                 
+                EVE.EVE_SPI_WriteBuffer(pointer, (uint)blockSize);
+                EVE.EVE_SPI_Disable();                 
                 size = size - blockSize;
                 address = (uint)(address + blockSize);
                 pointer = new IntPtr(pointer.ToInt64() + blockSize);
@@ -80,21 +81,30 @@ namespace EVEBitmapViewer
 
         void DisplayImage(Image img)
         {
+            bool halfres = false;
             this.pictureBox1.Image = null;
             if (!CurrentState)
                 return;
-            Bitmap source = new Bitmap(EVE.Display_Width(), EVE.Display_Height(), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            int height = EVE.Display_Height();
+            /* 10.1 uses too much ram for the buffer available in the EVE */
+            if (EVE.Display_Width() == 1280 && EVE.Display_Height() == 800)
+            {
+                height = height / 2;
+                halfres = true;
+            }
+            Bitmap source = new Bitmap(EVE.Display_Width(), height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             using (Graphics g = Graphics.FromImage(source))
             {
                 float fact = ((float)EVE.Display_Width()) / source.Width;
                 float w = source.Width * fact;
                 float h = source.Height * fact;
                 g.Clear(Color.Black);
+                g.InterpolationMode = InterpolationMode.HighQualityBilinear;
                 g.DrawImage(img, 0, 0,w,h);
             }
             pictureBox1.Image = source;
             //Creat a 16 bit copy of it using the graphics class
-            Bitmap dest = new Bitmap(EVE.Display_Width(), EVE.Display_Height(), System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
+            Bitmap dest = new Bitmap(EVE.Display_Width(), height, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
             using (Graphics g = Graphics.FromImage(dest))
             {
                 g.DrawImageUnscaled(source, 0, 0);
@@ -111,10 +121,17 @@ namespace EVEBitmapViewer
             EVE.Send_CMD(EVE.CLEAR(1, 1, 1));             //Clear the screen and the curren display list
 
             EVE.Send_CMD(EVE.BITMAP_SOURCE(0));
-            EVE.Send_CMD(EVE.BITMAP_LAYOUT(EVE.RGB565, EVE.Display_Width() * 2, EVE.Display_Height()));
-            EVE.Send_CMD(EVE.BITMAP_LAYOUTH(EVE.Display_Width() * 2, EVE.Display_Height()));
-
+            EVE.Send_CMD(EVE.BITMAP_LAYOUT(EVE.RGB565, EVE.Display_Width() * 2, height));
+            EVE.Send_CMD(EVE.BITMAP_LAYOUTH(EVE.Display_Width() * 2, height));
             EVE.Send_CMD(EVE.BEGIN(EVE.BITMAPS));                                  // Begin bitmap placement
+            if (halfres)
+            {
+                EVE.Send_CMD(EVE.CMD_LOADIDENTITY);
+                EVE.Send_CMD(EVE.CMD_SCALE);
+                EVE.Send_CMD(1 << 16);
+                EVE.Send_CMD(2 << 16);
+                EVE.Send_CMD(EVE.CMD_SETMATRIX);
+            }
             EVE.Send_CMD(EVE.VERTEX2II(0, 0, 0, 0));              // Define the placement position of the previously defined holding area.
             EVE.Send_CMD(EVE.END());                                           // end placing bitmaps
 
@@ -175,8 +192,7 @@ namespace EVEBitmapViewer
                     if (newState)
                     {
                         int model = cbModel.SelectedIndex+1; 
-                        // We are not using the external clock or flash, eve2 will do the trick for both 2+3
-                        int res = EVE.FT81x_Init(model, EVE.BOARD_EVE2, EVE.TOUCH_TPN);
+                        int res = EVE.FT81x_Init(model, model == EVE.DISPLAY_101 ? EVE.BOARD_EVE4 : EVE.BOARD_EVE2, EVE.TOUCH_TPN);
                         if (res != 0)
                         {
                             SetConnectButton(false);
@@ -197,6 +213,13 @@ namespace EVEBitmapViewer
                         SetConnectButton(true);
                     }
                 }
+                else if (newState == false)
+                {
+                    this.pictureBox1.Image = null;
+                    txtBridgeDetected.Text = "No";
+                    CurrentState = false;
+                    SetConnectButton(true);
+                }
             }
             catch
             {
@@ -216,13 +239,13 @@ namespace EVEBitmapViewer
             ConnectEnable = !enableConnect;
             tbConnect.Text = enableConnect ? "Connect" : "Disconnect";
             cbModel.Enabled = enableConnect;
+            CurrentState = false;
         }
 
 
         private void tbConnect_Click(object sender, EventArgs e)
         {
-            ConnectEnable = !ConnectEnable;
-            tbConnect.Checked = ConnectEnable;
+            SetConnectButton(ConnectEnable);
         }
     }
 }

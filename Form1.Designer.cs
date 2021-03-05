@@ -33,13 +33,13 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cbModel = new System.Windows.Forms.ToolStripComboBox();
+            this.tbConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.txtBridgeDetected = new System.Windows.Forms.ToolStripTextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
-            this.tbConnect = new System.Windows.Forms.ToolStripButton();
-            this.txtBridgeDetected = new System.Windows.Forms.ToolStripTextBox();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -67,7 +67,9 @@
             // 
             // cbModel
             // 
+            this.cbModel.DropDownHeight = 200;
             this.cbModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbModel.IntegralHeight = false;
             this.cbModel.Items.AddRange(new object[] {
             "70",
             "50",
@@ -75,10 +77,25 @@
             "39",
             "38",
             "35",
-            "29"});
+            "29",
+            "40",
+            "101 (Half Resolution)"});
             this.cbModel.Name = "cbModel";
-            this.cbModel.Size = new System.Drawing.Size(75, 25);
+            this.cbModel.Size = new System.Drawing.Size(125, 25);
             this.cbModel.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            // 
+            // tbConnect
+            // 
+            this.tbConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tbConnect.Checked = true;
+            this.tbConnect.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tbConnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tbConnect.Image")));
+            this.tbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbConnect.Name = "tbConnect";
+            this.tbConnect.Size = new System.Drawing.Size(26, 22);
+            this.tbConnect.Text = "xxx";
+            this.tbConnect.Click += new System.EventHandler(this.tbConnect_Click);
             // 
             // toolStripSeparator1
             // 
@@ -91,6 +108,13 @@
             this.toolStripLabel2.Size = new System.Drawing.Size(121, 22);
             this.toolStripLabel2.Text = "USB Bridge Detected :";
             this.toolStripLabel2.Click += new System.EventHandler(this.toolStripLabel2_Click);
+            // 
+            // txtBridgeDetected
+            // 
+            this.txtBridgeDetected.Name = "txtBridgeDetected";
+            this.txtBridgeDetected.ReadOnly = true;
+            this.txtBridgeDetected.Size = new System.Drawing.Size(100, 25);
+            this.txtBridgeDetected.Text = "No";
             // 
             // pictureBox1
             // 
@@ -118,26 +142,6 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Drag and drop an image file here.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tbConnect
-            // 
-            this.tbConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.tbConnect.Checked = true;
-            this.tbConnect.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tbConnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tbConnect.Image")));
-            this.tbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbConnect.Name = "tbConnect";
-            this.tbConnect.Size = new System.Drawing.Size(26, 22);
-            this.tbConnect.Text = "xxx";
-            this.tbConnect.Click += new System.EventHandler(this.tbConnect_Click);
-            // 
-            // txtBridgeDetected
-            // 
-            this.txtBridgeDetected.Name = "txtBridgeDetected";
-            this.txtBridgeDetected.ReadOnly = true;
-            this.txtBridgeDetected.Size = new System.Drawing.Size(100, 25);
-            this.txtBridgeDetected.Text = "No";
             // 
             // Form1
             // 
