@@ -86,8 +86,9 @@ namespace EVEBitmapViewer
             if (!CurrentState)
                 return;
             int height = EVE.Display_Height();
-            /* 10.1 uses too much ram for the buffer available in the EVE */
-            if (EVE.Display_Width() == 1280 && EVE.Display_Height() == 800)
+            /* 10.1 and 7.0 IPS use too much ram for the buffer available in the EVE */
+            if ((EVE.Display_Width() == 1280 && EVE.Display_Height() == 800) ||
+               ((EVE.Display_Width() == 1024 && EVE.Display_Height() == 600)))
             {
                 height = height / 2;
                 halfres = true;

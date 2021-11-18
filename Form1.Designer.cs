@@ -79,7 +79,9 @@
             "35",
             "29",
             "40",
-            "101 (Half Resolution)"});
+            "101 (Half Resolution)",
+            "70I (Half Resolution)",
+            "40"});
             this.cbModel.Name = "cbModel";
             this.cbModel.Size = new System.Drawing.Size(125, 25);
             this.cbModel.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);

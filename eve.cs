@@ -87,6 +87,8 @@ namespace EVEBitmapViewer
         public const int DISPLAY_29 = 7;
         public const int DISPLAY_40 = 8;
         public const int DISPLAY_101 = 9;
+        public const int DISPLAY_70I = 10;
+        public const int DISPLAY_24 = 11;
 
         public const int BOARD_EVE2 = 1;
         public const int BOARD_EVE3 = 2;
