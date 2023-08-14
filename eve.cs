@@ -55,6 +55,10 @@ namespace EVEBitmapViewer
         public const int PALETTED4444 = 15;
         public const int PALETTED8 = 16;
         public const int L2 = 17;
+        public const int REG_PCLK = 0x70;
+        public const int RAM_REG = 0x302000;
+        public const int REG_CPU_RESET = 0x20;
+        public const int REG_PWM_DUTY = 0xD4;
 
         // Bitmap Layout Format Definitions - BT81X Series Programming Guide Section 4.6;
         public const int COMPRESSED_RGBA_ASTC_4x4_KHR = 37808;  // 8.00;
@@ -87,12 +91,9 @@ namespace EVEBitmapViewer
         public const int DISPLAY_29 = 7;
         public const int DISPLAY_40 = 8;
         public const int DISPLAY_101 = 9;
-        public const int DISPLAY_70I = 10;
-        public const int DISPLAY_24 = 11;
 
         public const int BOARD_EVE2 = 1;
         public const int BOARD_EVE3 = 2;
-        public const int BOARD_EVE4 = 3;
 
         public const int TOUCH_TPN = 0;
         public const int TOUCH_TPR = 1;
@@ -169,7 +170,7 @@ namespace EVEBitmapViewer
         public static UInt32 CLEAR_COLOR_RGB(byte red, byte green, byte blue)
         {
             // CLEAR_COLOR_RGB - FT-PG Section 4.23
-            return (uint)(((uint)2 << 24) | (((red) & 255) << 16) | (((green) & 255) << 8) | (((blue) & 255) << 0));                                                        
+            return (uint)((2 << 24) | (((red) & 255) << 16) | (((green) & 255) << 8) | (((blue) & 255) << 0));                                                        
         }
 
         public static UInt32 COLOR_RGB(byte red, byte green, byte blue)
@@ -233,16 +234,16 @@ namespace EVEBitmapViewer
         {
             return (UInt32)((7 << 24) | (((format) & 31) << 19) | (((linestride) & 1023) << 9) | (((height) & 511) << 0));
         }
-        
+
         public static UInt32 BITMAP_LAYOUTH(int linestride, int height)
         {
             int stride = (linestride >> 10) & 3;
-            height = (height >> 10) & 3;
-            return (UInt32)((0x28 << 24) | (stride << 2)  | height);
+            height = (height >> 9) & 3;
+            return (UInt32)((0x28 << 24) | (stride << 2)  | height );
         }
-        
-        const string EveDLL = @"eve.dll";
 
+        const string EveDLL = @"eve.dll";
+                
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
         public static extern int FT81x_Init(int display, int board, int touch);
 
@@ -259,11 +260,13 @@ namespace EVEBitmapViewer
         public static extern void Cmd_SetBitmap(UInt32 addr, UInt16 fmt, UInt16 width, UInt16 height);
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
+        public static extern void wr8(UInt32 addr, byte value);
+
+        [DllImport(EveDLL, CharSet = CharSet.Ansi)]
         public static extern Int32 Display_Width();
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
         public static extern Int32 Display_Height();
-
 
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
         public static extern int SPI_GetNumChannels(ref UInt32 numChannels);
@@ -290,7 +293,37 @@ namespace EVEBitmapViewer
         [DllImport(EveDLL, CharSet = CharSet.Ansi)]
         public static extern void EVE_SPI_WriteBuffer(IntPtr buffer, UInt32 count);
 
+        public class EveDisplay
+        {
+            public int id { get; set; }
+            public string description { get; set; }
+            public EveDisplay(int id, string description)
+            {
+                this.id = id;
+                this.description = description;
+            }
+            public override string ToString()
+            {
+                return description;
+            }
 
+        }
+
+        public static List<EveDisplay> Displays = new List<EveDisplay>()
+        {
+            new EveDisplay(9, "10.1  1280x800"),
+            new EveDisplay(1 ,"7.0   1024x600"),
+            new EveDisplay(10,"7.0    800x480"),
+            new EveDisplay(2, "5.0    800x480"),
+            new EveDisplay(3, "4.3    480x272"), 
+            new EveDisplay(14,"4.3    800x480"), 
+            new EveDisplay(8, "4.0    720x720"),
+            new EveDisplay(4, "3.9    480x128"),
+            new EveDisplay(5, "3.8    480x116"),
+            new EveDisplay(6, "3.5    320x240"),
+            new EveDisplay(7, "2.9    320x102"),
+            new EveDisplay(11,"2.4    320x240"),
+        };
 
     }
 }

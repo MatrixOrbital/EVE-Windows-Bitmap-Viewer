@@ -18,7 +18,7 @@ namespace EVEBitmapViewer
         void MakeScreen_MatrixOrbital(int DotSize)
         {
             EVE.Send_CMD(EVE.CMD_DLSTART);                //Start a new display list
-            EVE.Send_CMD(EVE.VERTEXFORMAT(0));            //setup VERTEX2F to take pixel coordinates
+            EVE.Send_CMD(EVE.VERTEXFORMAT(0));                //setup VERTEX2F to take pixel coordinates
             EVE.Send_CMD(EVE.CLEAR_COLOR_RGB(0, 0, 0));   //Determine the clear screen color
             EVE.Send_CMD(EVE.CLEAR(1, 1, 1));             //Clear the screen and the curren display list
             EVE.Send_CMD(EVE.COLOR_RGB(26, 26, 192));     // change colour to blue
@@ -63,15 +63,31 @@ namespace EVEBitmapViewer
             this.DragEnter += Form1_DragEnter;
             pictureBox1.Parent = label1;
             pictureBox1.BackColor = Color.Transparent;
-            cbModel.Text = Settings.Default.Display;
-            SetConnectButton(true);
+            string PreviousDisplay = Settings.Default.Display; // Setting the datasource will reset this. 
+            cbModel.ComboBox.DataSource = EVE.Displays;
+            var disp = EVE.Displays.Where(x => x.description == PreviousDisplay).FirstOrDefault();
+            if (disp != null)
+            {
+                cbModel.SelectedItem = disp;
+            }
+            cbScale.Text = Settings.Default.Scale;
+            SetConnectButton();
         }
 
         private void Form1_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.Bitmap) || e.Data.GetDataPresent(DataFormats.FileDrop))
+            string[] formats = e.Data.GetFormats(true);
+            if (IsEveConnected)
             {
-                e.Effect = DragDropEffects.Copy;
+                if (e.Data.GetDataPresent(DataFormats.Bitmap) || 
+                    e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                }
             }
             else
             {
@@ -79,31 +95,89 @@ namespace EVEBitmapViewer
             }
         }
 
+        enum PictureScale
+        {
+            Stretch,
+            Proportional,
+            None
+        }
         void DisplayImage(Image img)
         {
             bool halfres = false;
             this.pictureBox1.Image = null;
-            if (!CurrentState)
+            if (!CurrentBridgeDetectedState)
                 return;
             int height = EVE.Display_Height();
-            /* 10.1 and 7.0 IPS use too much ram for the buffer available in the EVE */
-            if ((EVE.Display_Width() == 1280 && EVE.Display_Height() == 800) ||
-               ((EVE.Display_Width() == 1024 && EVE.Display_Height() == 600)))
+            float height_fact = 1.0f;
+            // Half the resolution if the bitmap does not fit in RAM 
+            if (EVE.Display_Width() * EVE.Display_Height() *2 > 1024*1024)
             {
                 height = height / 2;
                 halfres = true;
+                height_fact = 0.5f;
             }
             Bitmap source = new Bitmap(EVE.Display_Width(), height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            PictureScale scale = (PictureScale)Enum.Parse(typeof(PictureScale), cbScale.Text);
             using (Graphics g = Graphics.FromImage(source))
             {
-                float fact = ((float)EVE.Display_Width()) / source.Width;
-                float w = source.Width * fact;
-                float h = source.Height * fact;
-                g.Clear(Color.Black);
-                g.InterpolationMode = InterpolationMode.HighQualityBilinear;
-                g.DrawImage(img, 0, 0,w,h);
+                switch(scale)
+                {
+                    case PictureScale.Proportional:
+                        {
+                            // Scale along size the longest axis
+                            if (img.Width > img.Height)
+                            {
+                                float fact = (float)source.Width / (float)img.Width;
+                                float w = source.Width;
+                                float h = img.Height * fact * height_fact;
+                                float y = (source.Height - h) / 2;
+                                g.Clear(Color.Black);
+                                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                g.DrawImage(img, 0, y, w, h);
+                            }
+                            else
+                            {
+                                float fact = (float)source.Height / (float)img.Height;
+                                float w = img.Width * fact;
+                                float h = source.Height * height_fact;
+                                float x = (source.Width- w) / 2;
+                                g.Clear(Color.Black);
+                                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                g.DrawImage(img, x, 0, w, h);
+                            }
+                            break;
+                        }
+                    case PictureScale.Stretch:
+                        {
+                            float fact = ((float)EVE.Display_Width()) / source.Width;
+                            float w = source.Width * fact;
+                            float h = source.Height * fact;
+                            g.Clear(Color.Black);
+                            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                            g.DrawImage(img, 0, 0, w, h);
+                            break;
+                        }
+                    case PictureScale.None:
+                        g.Clear(Color.Black);
+                        g.DrawImage(img, 0, 0);
+                        break;
+                }
             }
-            pictureBox1.Image = source;
+            if (halfres)
+            {
+                Bitmap doubleSource = new Bitmap(source.Width, source.Height * 2, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                using (Graphics g = Graphics.FromImage(doubleSource))
+                {
+                    g.Clear(Color.Black);
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(source, 0, 0, source.Width, source.Height * 2);
+                }
+                pictureBox1.Image = doubleSource;
+            }
+            else
+            {
+                pictureBox1.Image = source;
+            }
             //Creat a 16 bit copy of it using the graphics class
             Bitmap dest = new Bitmap(EVE.Display_Width(), height, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
             using (Graphics g = Graphics.FromImage(dest))
@@ -144,17 +218,24 @@ namespace EVEBitmapViewer
 
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
+            if (!IsEveConnected)
+                return;
             // Handle FileDrop data.
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 try
                 {
-                    DisplayImage(Image.FromFile(files[0]));
+                    for (int i = 0; i < files.Count(); i++)
+                    {
+                        CurrentImage = Image.FromFile(files[i]);
+                        DisplayImage(CurrentImage);
+                        Application.DoEvents();
+                    }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Error loading image.","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -162,7 +243,8 @@ namespace EVEBitmapViewer
             {
                 try
                 {
-                    DisplayImage((Image)e.Data.GetData(DataFormats.Bitmap));
+                    CurrentImage = (Image)e.Data.GetData(DataFormats.Bitmap);
+                    DisplayImage(CurrentImage);
                 }
                 catch (Exception ex)
                 {
@@ -177,52 +259,36 @@ namespace EVEBitmapViewer
         {
 
         }
-        bool CurrentState = false;
-        bool ConnectEnable = false;
+        bool CurrentBridgeDetectedState = false;
+        bool IsEveConnected = false;
+        Image CurrentImage = null;
+
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (!ConnectEnable)
-            {
-                return;
-            }
             try
             {
-                bool newState = EVE.SPI_NumChannels() > 0;
-                if (newState != CurrentState)
+                bool newBridgeState = EVE.SPI_NumChannels() > 0;
+                txtBridgeDetected.Text = newBridgeState ? "Yes" : "No";
+                if (newBridgeState != CurrentBridgeDetectedState)
                 {
-                    if (newState)
+                    CurrentBridgeDetectedState = newBridgeState;
+                    if (!newBridgeState)
                     {
-                        int model = cbModel.SelectedIndex+1; 
-                        int res = EVE.FT81x_Init(model, model == EVE.DISPLAY_101 ? EVE.BOARD_EVE4 : EVE.BOARD_EVE2, EVE.TOUCH_TPN);
-                        if (res != 0)
+                        this.pictureBox1.Image = null;
+                        if (IsEveConnected)
                         {
-                            SetConnectButton(false);
-                            CurrentState = newState;
-                            txtBridgeDetected.Text =  "Yes";
-                            MakeScreen_MatrixOrbital(24);
-                        }
-                        else
-                        {
-                            txtBridgeDetected.Text = "Scanning";
+                            IsEveConnected = false;
                         }
                     }
                     else
                     {
-                        this.pictureBox1.Image = null;
-                        txtBridgeDetected.Text = "No";
-                        CurrentState = newState;
-                        SetConnectButton(true);
+
                     }
-                }
-                else if (newState == false)
-                {
-                    this.pictureBox1.Image = null;
-                    txtBridgeDetected.Text = "No";
-                    CurrentState = false;
-                    SetConnectButton(true);
+                    SetConnectButton();
+
                 }
             }
-            catch
+            catch 
             {
                 txtBridgeDetected.Text = "Error";
             }
@@ -230,23 +296,87 @@ namespace EVEBitmapViewer
 
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.Display = cbModel.Text;
+            Settings.Default.Display = cbModel.SelectedItem.ToString();
             Settings.Default.Save();
-            CurrentState = false;
         }
 
-        void SetConnectButton(bool enableConnect)
+        void SetConnectButton()
         {
-            ConnectEnable = !enableConnect;
-            tbConnect.Text = enableConnect ? "Connect" : "Disconnect";
-            cbModel.Enabled = enableConnect;
-            CurrentState = false;
+            tbConnect.Text = (!IsEveConnected) ? "Connect" : "Disconnect";
+            txtEveID.Text = (IsEveConnected) ? txtEveID.Text : "No";
+            txtEveID.BackgroundImageLayout = ImageLayout.Stretch;
+            txtEveID.BackgroundImage = new Bitmap(1, 1);
+            var g = Graphics.FromImage(txtEveID.BackgroundImage);
+            if (IsEveConnected)
+                g.Clear(Color.PaleGreen);
+            else
+                g.Clear(Color.Transparent);
+            tbConnect.Enabled = CurrentBridgeDetectedState;
+            cbModel.Enabled = !IsEveConnected;
         }
 
 
         private void tbConnect_Click(object sender, EventArgs e)
         {
-            SetConnectButton(ConnectEnable);
+            if (!IsEveConnected)
+            {
+                EVE.EveDisplay disp = cbModel.SelectedItem as EVE.EveDisplay;
+                int model = disp.id;
+                int res = EVE.FT81x_Init(model, EVE.BOARD_EVE2, EVE.TOUCH_TPN);
+                if (res > 1)
+                {
+                    string EVE_ID = string.Format("Unknown 0x{0:x8}",res);
+                    switch(res)
+                    {
+                        case 0x00011008:
+                            EVE_ID = "BT810";
+                            break;
+                        case 0x00011108:
+                            EVE_ID = "BT811";
+                            break;
+                        case 0x00011208:
+                            EVE_ID = "BT812";
+                            break;
+                        case 0x00011308:
+                            EVE_ID = "BT813";
+                            break;
+                        case 0x00011508:
+                            EVE_ID = "BT815";
+                            break;
+                        case 0x00011608:
+                            EVE_ID = "BT816";
+                            break;
+                        case 0x00011708:
+                            EVE_ID = "BT817";
+                            break;
+                        case 0x00011808:
+                            EVE_ID = "BT818";
+                            break;
+                    }
+                    txtEveID.Text = "Yes, " + EVE_ID;
+                    MakeScreen_MatrixOrbital(24);
+                    IsEveConnected = true;
+                }
+                else
+                {
+                    MessageBox.Show("EVE not detected.");
+                    txtEveID.Text = "No";
+                }
+            }
+            else
+            {
+                EVE.wr8(EVE.RAM_REG + EVE.REG_PWM_DUTY, 0);
+                IsEveConnected = false;
+            }
+            SetConnectButton();
+        }
+
+        private void cbScale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CurrentImage != null && IsEveConnected)
+            {
+                DisplayImage(CurrentImage);
+            }
         }
     }
 }

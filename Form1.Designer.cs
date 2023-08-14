@@ -37,6 +37,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.txtBridgeDetected = new System.Windows.Forms.ToolStripTextBox();
+            this.txtEveLabel = new System.Windows.Forms.ToolStripLabel();
+            this.txtEveID = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.cbScale = new System.Windows.Forms.ToolStripComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
@@ -52,36 +56,29 @@
             this.tbConnect,
             this.toolStripSeparator1,
             this.toolStripLabel2,
-            this.txtBridgeDetected});
+            this.txtBridgeDetected,
+            this.txtEveLabel,
+            this.txtEveID,
+            this.toolStripLabel3,
+            this.cbScale});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(543, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(814, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(85, 22);
-            this.toolStripLabel1.Text = "Model EVE2/3-";
+            this.toolStripLabel1.Size = new System.Drawing.Size(68, 22);
+            this.toolStripLabel1.Text = "Model EVE-";
             // 
             // cbModel
             // 
             this.cbModel.DropDownHeight = 200;
             this.cbModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbModel.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbModel.IntegralHeight = false;
-            this.cbModel.Items.AddRange(new object[] {
-            "70",
-            "50",
-            "43",
-            "39",
-            "38",
-            "35",
-            "29",
-            "40",
-            "101 (Half Resolution)",
-            "70I (Half Resolution)",
-            "40"});
             this.cbModel.Name = "cbModel";
             this.cbModel.Size = new System.Drawing.Size(125, 25);
             this.cbModel.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
@@ -115,17 +112,49 @@
             // 
             this.txtBridgeDetected.Name = "txtBridgeDetected";
             this.txtBridgeDetected.ReadOnly = true;
-            this.txtBridgeDetected.Size = new System.Drawing.Size(100, 25);
+            this.txtBridgeDetected.Size = new System.Drawing.Size(30, 25);
             this.txtBridgeDetected.Text = "No";
+            // 
+            // txtEveLabel
+            // 
+            this.txtEveLabel.Name = "txtEveLabel";
+            this.txtEveLabel.Size = new System.Drawing.Size(78, 22);
+            this.txtEveLabel.Text = "Eve Detected:";
+            // 
+            // txtEveID
+            // 
+            this.txtEveID.BackColor = System.Drawing.SystemColors.Control;
+            this.txtEveID.Name = "txtEveID";
+            this.txtEveID.Size = new System.Drawing.Size(98, 22);
+            this.txtEveID.Text = "EVE Detected: No";
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(34, 22);
+            this.toolStripLabel3.Text = "Scale";
+            // 
+            // cbScale
+            // 
+            this.cbScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbScale.Items.AddRange(new object[] {
+            "Proportional",
+            "None",
+            "Stretch"});
+            this.cbScale.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            this.cbScale.Name = "cbScale";
+            this.cbScale.Size = new System.Drawing.Size(121, 25);
+            this.cbScale.SelectedIndexChanged += new System.EventHandler(this.cbScale_SelectedIndexChanged);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 25);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(543, 280);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.Size = new System.Drawing.Size(814, 479);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
@@ -140,7 +169,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(0, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(543, 255);
+            this.label1.Size = new System.Drawing.Size(814, 479);
             this.label1.TabIndex = 2;
             this.label1.Text = "Drag and drop an image file here.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -149,13 +178,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(543, 280);
+            this.ClientSize = new System.Drawing.Size(814, 504);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Eve Bitmap Viewer";
+            this.Text = "EVE Bitmap Viewer";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -176,6 +205,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripButton tbConnect;
         private System.Windows.Forms.ToolStripTextBox txtBridgeDetected;
+        private System.Windows.Forms.ToolStripLabel txtEveID;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.ToolStripComboBox cbScale;
+        private System.Windows.Forms.ToolStripLabel txtEveLabel;
     }
 }
 

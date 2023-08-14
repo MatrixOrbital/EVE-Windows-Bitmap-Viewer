@@ -5,5 +5,8 @@
     <Setting Name="Display" Type="System.String" Scope="User">
       <Value Profile="(Default)">43</Value>
     </Setting>
+    <Setting Name="Scale" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Proportional</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

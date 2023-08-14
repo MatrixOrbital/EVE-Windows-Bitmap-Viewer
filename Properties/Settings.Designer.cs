@@ -34,5 +34,17 @@ namespace EVEBitmapViewer.Properties {
                 this["Display"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Proportional")]
+        public string Scale {
+            get {
+                return ((string)(this["Scale"]));
+            }
+            set {
+                this["Scale"] = value;
+            }
+        }
     }
 }
