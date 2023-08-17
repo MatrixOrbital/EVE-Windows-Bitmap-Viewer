@@ -63,14 +63,14 @@
             this.cbScale});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(814, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(814, 27);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(68, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(68, 24);
             this.toolStripLabel1.Text = "Model EVE-";
             // 
             // cbModel
@@ -80,11 +80,12 @@
             this.cbModel.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbModel.IntegralHeight = false;
             this.cbModel.Name = "cbModel";
-            this.cbModel.Size = new System.Drawing.Size(125, 25);
+            this.cbModel.Size = new System.Drawing.Size(125, 27);
             this.cbModel.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
             // 
             // tbConnect
             // 
+            this.tbConnect.AutoSize = false;
             this.tbConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.tbConnect.Checked = true;
             this.tbConnect.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -92,19 +93,19 @@
             this.tbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tbConnect.Image")));
             this.tbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbConnect.Name = "tbConnect";
-            this.tbConnect.Size = new System.Drawing.Size(26, 22);
+            this.tbConnect.Size = new System.Drawing.Size(100, 22);
             this.tbConnect.Text = "xxx";
             this.tbConnect.Click += new System.EventHandler(this.tbConnect_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(121, 22);
+            this.toolStripLabel2.Size = new System.Drawing.Size(121, 24);
             this.toolStripLabel2.Text = "USB Bridge Detected :";
             this.toolStripLabel2.Click += new System.EventHandler(this.toolStripLabel2_Click);
             // 
@@ -112,26 +113,27 @@
             // 
             this.txtBridgeDetected.Name = "txtBridgeDetected";
             this.txtBridgeDetected.ReadOnly = true;
-            this.txtBridgeDetected.Size = new System.Drawing.Size(30, 25);
+            this.txtBridgeDetected.Size = new System.Drawing.Size(35, 27);
             this.txtBridgeDetected.Text = "No";
             // 
             // txtEveLabel
             // 
             this.txtEveLabel.Name = "txtEveLabel";
-            this.txtEveLabel.Size = new System.Drawing.Size(78, 22);
-            this.txtEveLabel.Text = "Eve Detected:";
+            this.txtEveLabel.Size = new System.Drawing.Size(79, 24);
+            this.txtEveLabel.Text = "EVE Detected:";
             // 
             // txtEveID
             // 
+            this.txtEveID.AutoSize = false;
             this.txtEveID.BackColor = System.Drawing.SystemColors.Control;
             this.txtEveID.Name = "txtEveID";
-            this.txtEveID.Size = new System.Drawing.Size(98, 22);
+            this.txtEveID.Size = new System.Drawing.Size(98, 24);
             this.txtEveID.Text = "EVE Detected: No";
             // 
             // toolStripLabel3
             // 
             this.toolStripLabel3.Name = "toolStripLabel3";
-            this.toolStripLabel3.Size = new System.Drawing.Size(34, 22);
+            this.toolStripLabel3.Size = new System.Drawing.Size(34, 24);
             this.toolStripLabel3.Text = "Scale";
             // 
             // cbScale
@@ -143,7 +145,7 @@
             "Stretch"});
             this.cbScale.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.cbScale.Name = "cbScale";
-            this.cbScale.Size = new System.Drawing.Size(121, 25);
+            this.cbScale.Size = new System.Drawing.Size(121, 23);
             this.cbScale.SelectedIndexChanged += new System.EventHandler(this.cbScale_SelectedIndexChanged);
             // 
             // pictureBox1
@@ -151,9 +153,9 @@
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 25);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 27);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(814, 479);
+            this.pictureBox1.Size = new System.Drawing.Size(814, 477);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
@@ -167,9 +169,9 @@
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(0, 25);
+            this.label1.Location = new System.Drawing.Point(0, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(814, 479);
+            this.label1.Size = new System.Drawing.Size(814, 477);
             this.label1.TabIndex = 2;
             this.label1.Text = "Drag and drop an image file here.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

@@ -25,7 +25,7 @@ namespace EVEBitmapViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("43")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5.0    800x480")]
         public string Display {
             get {
                 return ((string)(this["Display"]));

@@ -312,11 +312,11 @@ namespace EVEBitmapViewer
         public static List<EveDisplay> Displays = new List<EveDisplay>()
         {
             new EveDisplay(9, "10.1  1280x800"),
-            new EveDisplay(1 ,"7.0   1024x600"),
-            new EveDisplay(10,"7.0    800x480"),
+            new EveDisplay(10,"7.0   1024x600"),
+            new EveDisplay(1 ,"7.0    800x480"),
             new EveDisplay(2, "5.0    800x480"),
             new EveDisplay(3, "4.3    480x272"), 
-            new EveDisplay(14,"4.3    800x480"), 
+            new EveDisplay(13,"4.3    800x480"), 
             new EveDisplay(8, "4.0    720x720"),
             new EveDisplay(4, "3.9    480x128"),
             new EveDisplay(5, "3.8    480x116"),

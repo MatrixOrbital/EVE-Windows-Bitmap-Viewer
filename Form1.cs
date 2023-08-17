@@ -103,19 +103,10 @@ namespace EVEBitmapViewer
         }
         void DisplayImage(Image img)
         {
-            bool halfres = false;
             this.pictureBox1.Image = null;
             if (!CurrentBridgeDetectedState)
                 return;
             int height = EVE.Display_Height();
-            float height_fact = 1.0f;
-            // Half the resolution if the bitmap does not fit in RAM 
-            if (EVE.Display_Width() * EVE.Display_Height() *2 > 1024*1024)
-            {
-                height = height / 2;
-                halfres = true;
-                height_fact = 0.5f;
-            }
             Bitmap source = new Bitmap(EVE.Display_Width(), height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
             PictureScale scale = (PictureScale)Enum.Parse(typeof(PictureScale), cbScale.Text);
             using (Graphics g = Graphics.FromImage(source))
@@ -124,27 +115,31 @@ namespace EVEBitmapViewer
                 {
                     case PictureScale.Proportional:
                         {
-                            // Scale along size the longest axis
-                            if (img.Width > img.Height)
+                            float fact_horizontal = (float)source.Width / (float)img.Width;
+                            float w_horizontal = source.Width;
+                            float h_horizontal = img.Height * fact_horizontal;
+
+                            float fact_vertical  = (float)source.Height / (float)img.Height;
+                            float w_vertical = img.Width * fact_vertical;
+                            float h_vertical = source.Height;
+                            float x, y,w,h;
+                            if (w_horizontal <= source.Width && h_horizontal <= source.Height)
                             {
-                                float fact = (float)source.Width / (float)img.Width;
-                                float w = source.Width;
-                                float h = img.Height * fact * height_fact;
-                                float y = (source.Height - h) / 2;
-                                g.Clear(Color.Black);
-                                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                g.DrawImage(img, 0, y, w, h);
+                                x = (source.Width - w_horizontal) / 2;
+                                y = (source.Height - h_horizontal) / 2;
+                                w = w_horizontal;
+                                h = h_horizontal;
                             }
                             else
                             {
-                                float fact = (float)source.Height / (float)img.Height;
-                                float w = img.Width * fact;
-                                float h = source.Height * height_fact;
-                                float x = (source.Width- w) / 2;
-                                g.Clear(Color.Black);
-                                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                g.DrawImage(img, x, 0, w, h);
+                                x = (source.Width - w_vertical) / 2;
+                                y = (source.Height - h_vertical) / 2;
+                                w = w_vertical;
+                                h = h_vertical;
                             }
+                            g.Clear(Color.Black);
+                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            g.DrawImage(img, x, y, w, h);
                             break;
                         }
                     case PictureScale.Stretch:
@@ -159,27 +154,27 @@ namespace EVEBitmapViewer
                         }
                     case PictureScale.None:
                         g.Clear(Color.Black);
-                        g.DrawImage(img, 0, 0);
+                        g.DrawImage(img, new Rectangle(0,0,source.Width, source.Height), new Rectangle(0,0,source.Width, source.Height), GraphicsUnit.Pixel);
                         break;
                 }
             }
-            if (halfres)
+            pictureBox1.Image = source;
+            bool halfres = false;
+            // Half the resolution if the bitmap does not fit in RAM 
+            if (EVE.Display_Width() * EVE.Display_Height() * 2 > 1024 * 1024)
             {
-                Bitmap doubleSource = new Bitmap(source.Width, source.Height * 2, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                using (Graphics g = Graphics.FromImage(doubleSource))
+                Bitmap HalfSource = new Bitmap(source.Width, source.Height / 2, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                using (Graphics g = Graphics.FromImage(HalfSource))
                 {
                     g.Clear(Color.Black);
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.DrawImage(source, 0, 0, source.Width, source.Height * 2);
+                    g.DrawImage(source, 0, 0, source.Width, source.Height / 2);
                 }
-                pictureBox1.Image = doubleSource;
-            }
-            else
-            {
-                pictureBox1.Image = source;
+                halfres = true;
+                source = HalfSource;
             }
             //Creat a 16 bit copy of it using the graphics class
-            Bitmap dest = new Bitmap(EVE.Display_Width(), height, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
+            Bitmap dest = new Bitmap(EVE.Display_Width(), source.Height, System.Drawing.Imaging.PixelFormat.Format16bppRgb565);
             using (Graphics g = Graphics.FromImage(dest))
             {
                 g.DrawImageUnscaled(source, 0, 0);
@@ -288,7 +283,7 @@ namespace EVEBitmapViewer
 
                 }
             }
-            catch 
+            catch
             {
                 txtBridgeDetected.Text = "Error";
             }

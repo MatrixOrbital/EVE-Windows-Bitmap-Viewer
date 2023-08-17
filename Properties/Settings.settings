@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Display" Type="System.String" Scope="User">
-      <Value Profile="(Default)">43</Value>
+      <Value Profile="(Default)">5.0    800x480</Value>
     </Setting>
     <Setting Name="Scale" Type="System.String" Scope="User">
       <Value Profile="(Default)">Proportional</Value>
