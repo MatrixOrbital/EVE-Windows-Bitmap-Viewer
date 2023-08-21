@@ -9,7 +9,7 @@ To use this application you will require
 
 [EVE2-USB2SPI-KIT-A](https://www.matrixorbital.com/eve2-usb2spi-kit-a) module or
 
-[EVE2-USB2SPI-KIT-B (new)](https://www.matrixorbital.com/eve-usb2spi-kit-b) module or
+[EVE-USB2SPI-KIT-B (new)](https://www.matrixorbital.com/eve-usb2spi-kit-b) module or
 
 [EVE3x USB version](https://www.matrixorbital.com/index.php?route=product/search&search=eve3x) TFT Display or
 
