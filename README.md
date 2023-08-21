@@ -24,15 +24,11 @@ To use this application you will require
 
 ![](Downloadlink1.png)
 
-- Start the application
+- Start the application, the USB Bridge should be automatically detected
+![](EVEBV-1.png)
 
-- Select the display size of your module  
-![](display_size.png)
-
-- Click the Connect button
-
-- Wait for the module to be detected  
-![](connected.png)
+- Select the display size of your module and Click the Connect button
+![](EVEBV-2.png)
 
 If the display is detected properly you should now see the Matrix Orbital screen on your display.
 
