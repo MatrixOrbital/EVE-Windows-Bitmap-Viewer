@@ -44,5 +44,5 @@ http://www.lcdforums.com/forums/viewforum.php?f=45
 
 ## Code
 
-The sample application is written in C# with a DLL version of the [Matrix Orbital Eve Library](https://github.com/MatrixOrbital/EVE2-Library) to handle the communication with the module.
+The sample application is written in C# with a DLL version of the [Matrix Orbital EVE Library](https://github.com/MatrixOrbital/EVE-Library) to handle the communication with the module.
 
