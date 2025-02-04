@@ -36,7 +36,6 @@
             this.tbConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.txtBridgeDetected = new System.Windows.Forms.ToolStripTextBox();
             this.txtEveLabel = new System.Windows.Forms.ToolStripLabel();
             this.txtEveID = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
@@ -44,6 +43,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
+            this.txtBridgeDetected = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -109,13 +109,6 @@
             this.toolStripLabel2.Text = "USB Bridge Detected :";
             this.toolStripLabel2.Click += new System.EventHandler(this.toolStripLabel2_Click);
             // 
-            // txtBridgeDetected
-            // 
-            this.txtBridgeDetected.Name = "txtBridgeDetected";
-            this.txtBridgeDetected.ReadOnly = true;
-            this.txtBridgeDetected.Size = new System.Drawing.Size(35, 27);
-            this.txtBridgeDetected.Text = "No";
-            // 
             // txtEveLabel
             // 
             this.txtEveLabel.Name = "txtEveLabel";
@@ -145,7 +138,7 @@
             "Stretch"});
             this.cbScale.MergeAction = System.Windows.Forms.MergeAction.Insert;
             this.cbScale.Name = "cbScale";
-            this.cbScale.Size = new System.Drawing.Size(121, 23);
+            this.cbScale.Size = new System.Drawing.Size(121, 27);
             this.cbScale.SelectedIndexChanged += new System.EventHandler(this.cbScale_SelectedIndexChanged);
             // 
             // pictureBox1
@@ -175,6 +168,12 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Drag and drop an image file here.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtBridgeDetected
+            // 
+            this.txtBridgeDetected.Name = "txtBridgeDetected";
+            this.txtBridgeDetected.Size = new System.Drawing.Size(23, 24);
+            this.txtBridgeDetected.Text = "No";
             // 
             // Form1
             // 
@@ -206,11 +205,11 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripButton tbConnect;
-        private System.Windows.Forms.ToolStripTextBox txtBridgeDetected;
         private System.Windows.Forms.ToolStripLabel txtEveID;
         private System.Windows.Forms.ToolStripLabel toolStripLabel3;
         private System.Windows.Forms.ToolStripComboBox cbScale;
         private System.Windows.Forms.ToolStripLabel txtEveLabel;
+        private System.Windows.Forms.ToolStripLabel txtBridgeDetected;
     }
 }
 

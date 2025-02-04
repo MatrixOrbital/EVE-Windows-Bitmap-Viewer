@@ -264,7 +264,15 @@ namespace EVEBitmapViewer
             {
                 bool newBridgeState = EVE.SPI_NumChannels() > 0;
                 txtBridgeDetected.Text = newBridgeState ? "Yes" : "No";
+                txtBridgeDetected.BackgroundImageLayout = ImageLayout.Stretch;
+                txtBridgeDetected.BackgroundImage = new Bitmap(1, 1);
+                var g = Graphics.FromImage(txtBridgeDetected.BackgroundImage);
+                if (newBridgeState)
+                    g.Clear(Color.PaleGreen);
+                else
+                    g.Clear(Color.Transparent);
                 if (newBridgeState != CurrentBridgeDetectedState)
+                    if (newBridgeState != CurrentBridgeDetectedState)
                 {
                     CurrentBridgeDetectedState = newBridgeState;
                     if (!newBridgeState)
